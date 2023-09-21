@@ -8,6 +8,9 @@ LOGGING = {
         "json": {
             "format": "%(asctime)s %(levelname)s %(message)s",
             "class": "pythonjsonlogger.jsonlogger.JsonFormatter",
+        },
+        'file': {
+            'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
         }
     },
     "handlers": {
@@ -15,9 +18,15 @@ LOGGING = {
             "class": "logging.StreamHandler",
             "stream": "ext://sys.stdout",
             "formatter": "json",
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'formatter': 'file',
+            'filename': 'debug.log'
         }
     },
-    "loggers": {"": {"handlers": ["stdout"], "level": "DEBUG"}},
+    "loggers": {"": {"handlers": ['file'], "level": "DEBUG"}},
 }
 
 
