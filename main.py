@@ -12,12 +12,15 @@ logger = logging.getLogger(__name__)
 
 
 def create_email_message(attempt_details):
-    positive_message = "Преподавателю всё понравилось, можно приступать к следущему уроку!"
+    positive_message = "Преподавателю всё понравилось, \
+        можно приступать к следущему уроку!"
     negative_message = "К сожалению, в работе нашлись ошибки."
-    message = negative_message if attempt_details["is_negative"] else positive_message
-    email_message = 'У вас проверили работу "{title}"\n{lesson_link}\n{message}'.format(
+    message = negative_message if attempt_details["is_negative"] \
+        else positive_message
+    template = 'У вас проверили работу "{title}"\n\n{link}\n\n{message}'
+    email_message = template.format(
         title=attempt_details["lesson_title"],
-        lesson_link=attempt_details["lesson_url"],
+        link=attempt_details["lesson_url"],
         message=message
     )
     return email_message
