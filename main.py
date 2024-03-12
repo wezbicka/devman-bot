@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 if __name__ == "__main__":
     load_dotenv()
     tg_token = os.environ["TG_TOKEN"]
-    chat_id = os.environ["CHAT_ID"]
+    chat_id = os.environ["TG_CHAT_ID"]
     bot = telegram.Bot(token=tg_token)
 
     devman_api_token = os.environ["DEVMAN_API_TOKEN"]
