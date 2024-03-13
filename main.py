@@ -11,7 +11,7 @@ import telegram
 logger = logging.getLogger(__name__)
 
 
-def create_email_message(attempt_details):
+def create_message(attempt_details):
     positive_message = "Преподавателю всё понравилось, \
         можно приступать к следущему уроку!"
     negative_message = "К сожалению, в работе нашлись ошибки."
@@ -34,10 +34,12 @@ if __name__ == "__main__":
     devman_api_token = os.environ["DEVMAN_API_TOKEN"]
     headers = {'Authorization': f"Token {devman_api_token}"}
     timestamp = ""
+    params = {}
     bot = telegram.Bot(token=tg_token)
     while True:
-        params = {"timestamp": timestamp}
         try:
+            if timestamp:
+                params["timestamp"] = timestamp
             response = requests.get(
                 url,
                 headers=headers,
@@ -45,12 +47,15 @@ if __name__ == "__main__":
                 params=params,
             )
             response.raise_for_status()
-            query = response.json()
-            logger.info(query)
-            attempt_details = query["new_attempts"][0]
-            email_message = create_email_message(attempt_details)
+            dvmn_answer = response.json()
+            logger.info(dvmn_answer)
+            if dvmn_answer['status'] == 'timeout':
+                timestamp = dvmn_answer['timestamp_to_request']
+            else:
+                attempt_details = dvmn_answer["new_attempts"][0]
+            message = create_message(attempt_details)
             timestamp = attempt_details["timestamp"]
-            bot.send_message(chat_id=chat_id, text=email_message)
+            bot.send_message(chat_id=chat_id, text=message)
         except requests.exceptions.ReadTimeout as exception:
             logger.error("Failed request %s", exception)
         except requests.exceptions.ConnectionError:
