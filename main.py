@@ -1,11 +1,41 @@
 import os
 import logging
+import logging.config
 from time import sleep
 
 import requests
 from dotenv import load_dotenv
 
 import telegram
+
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "json": {
+            "format": "%(asctime)s %(levelname)s %(message)s",
+            "class": "pythonjsonlogger.jsonlogger.JsonFormatter",
+        },
+        'file': {
+            'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
+        }
+    },
+    "handlers": {
+        "stdout": {
+            "class": "logging.StreamHandler",
+            "stream": "ext://sys.stdout",
+            "formatter": "json",
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'formatter': 'file',
+            'filename': 'debug.log'
+        }
+    },
+    "loggers": {"": {"handlers": ['file'], "level": "DEBUG"}},
+}
 
 
 logger = logging.getLogger(__name__)
@@ -28,6 +58,7 @@ def create_message(attempt_details):
 
 if __name__ == "__main__":
     load_dotenv()
+    logging.config.dictConfig(LOGGING)
     url = "https://dvmn.org/api/long_polling/"
     tg_token = os.environ["TG_TOKEN"]
     chat_id = os.environ["TG_CHAT_ID"]
