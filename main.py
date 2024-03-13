@@ -5,7 +5,6 @@ from time import sleep
 
 import requests
 from dotenv import load_dotenv
-
 import telegram
 
 
