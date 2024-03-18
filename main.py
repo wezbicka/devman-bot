@@ -47,12 +47,12 @@ def create_message(attempt_details):
     message = negative_message if attempt_details["is_negative"] \
         else positive_message
     template = 'У вас проверили работу "{title}"\n\n{link}\n\n{message}'
-    email_message = template.format(
+    sent_message = template.format(
         title=attempt_details["lesson_title"],
         link=attempt_details["lesson_url"],
         message=message
     )
-    return email_message
+    return sent_message
 
 
 if __name__ == "__main__":
@@ -81,6 +81,7 @@ if __name__ == "__main__":
             logger.info(dvmn_answer)
             if dvmn_answer['status'] == 'timeout':
                 timestamp = dvmn_answer['timestamp_to_request']
+                continue
             else:
                 attempt_details = dvmn_answer["new_attempts"][0]
             message = create_message(attempt_details)
