@@ -21,3 +21,9 @@ TG_CHAT_ID=<CHAT_ID>
 ```
 python main.py
 ```
+
+# Running with Docker
+- Register on the site and download [Docker](https://www.docker.com/)
+- Run the image creation command `docker build --tag dvmn-bot-docker .`
+- Click the Run button in Docker Descktop, set the environment variables and run the image.
+- Or run the container using the command `docker run -d --env-file.env dvmn-bot-docker`
